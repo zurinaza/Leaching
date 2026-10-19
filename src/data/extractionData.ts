@@ -1,0 +1,680 @@
+import { PlantContract, QuizQuestion, EquipmentMatchItem } from '../types/extraction';
+
+export const PLANT_CONTRACTS: PlantContract[] = [
+  {
+    id: 'soybean-oil',
+    title: 'Edible Oil Plant: Soybean Oil Extraction',
+    material: 'Flaked Soybean Cotyledons',
+    targetSolute: 'Triglyceride Lipids (Soybean Oil)',
+    inertMatrix: 'Protein & Fiber Meal (Defatted Marc)',
+    recommendedSolvent: 'n-Hexane (Industrial Grade)',
+    difficulty: 'standard',
+    solventsAvailable: [
+      {
+        id: 'hexane',
+        name: 'n-Hexane',
+        polarity: 'non-polar',
+        boilingPointC: 69,
+        selectivityScore: 9.8,
+        costPerKg: 1.2,
+      },
+      {
+        id: 'ethanol',
+        name: 'Ethanol (95%)',
+        polarity: 'polar-protic',
+        boilingPointC: 78,
+        selectivityScore: 6.2,
+        costPerKg: 2.1,
+      },
+      {
+        id: 'water',
+        name: 'Deionized Water',
+        polarity: 'polar-protic',
+        boilingPointC: 100,
+        selectivityScore: 1.5,
+        costPerKg: 0.1,
+        toxicityWarning: 'Extremely poor solubility for non-polar vegetable triglycerides.',
+      },
+      {
+        id: 'acetone',
+        name: 'Acetone',
+        polarity: 'polar-aprotic',
+        boilingPointC: 56,
+        selectivityScore: 7.0,
+        costPerKg: 1.8,
+      },
+    ],
+    optimalTempRange: [50, 60],
+    optimalParticleMm: [0.3, 0.6], // flaked beans
+    optimalRatioSF: [1.2, 1.8],
+    minRecoveryTarget: 95,
+    description: 'Crushed and conditioned soybeans must be extracted to reduce residual oil in the meal to < 1.0% while producing rich miscella (oil in hexane) for energy-efficient evaporation.',
+    industrialContext: 'Standard commercial soybean crushing facilities use flaking rolls followed by deep-bed counter-current percolation extractors like the Bollman or Rotocel.',
+  },
+  {
+    id: 'palm-oil-carotenoid',
+    title: 'Year 3 Advanced Challenge: Palm Mesocarp Carotenoid & Lipid Leaching',
+    material: 'Press Cake Palm Mesocarp Fibers (Elaeis guineensis)',
+    targetSolute: 'Beta-Carotene, Tocopherols & Triglycerides',
+    inertMatrix: 'Cellulose, Hemicellulose & Lignin Press Fiber',
+    recommendedSolvent: 'Isopropanol-Hexane Azeotropic Blend (Subcritical)',
+    difficulty: 'year3_advanced',
+    solventsAvailable: [
+      {
+        id: 'ipa_hexane',
+        name: 'Isopropanol-Hexane (50:50 Azeotrope)',
+        polarity: 'polar-aprotic',
+        boilingPointC: 64,
+        selectivityScore: 9.9,
+        costPerKg: 1.9,
+      },
+      {
+        id: 'hexane',
+        name: 'Pure n-Hexane',
+        polarity: 'non-polar',
+        boilingPointC: 69,
+        selectivityScore: 8.8,
+        costPerKg: 1.2,
+      },
+      {
+        id: 'ethanol',
+        name: 'Superheated Ethanol (96%)',
+        polarity: 'polar-protic',
+        boilingPointC: 78,
+        selectivityScore: 7.9,
+        costPerKg: 2.1,
+      },
+      {
+        id: 'sc_co2',
+        name: 'Supercritical CO₂ (35 MPa, 50°C)',
+        polarity: 'supercritical',
+        boilingPointC: 31,
+        selectivityScore: 9.7,
+        costPerKg: 3.8,
+      },
+    ],
+    optimalTempRange: [48, 56], // Strict: Beta-carotene degrades and undergoes thermal trans-cis bleaching >58°C
+    optimalParticleMm: [0.8, 1.5], // Fibrous matrix prone to severe variable underflow cake compressibility
+    optimalRatioSF: [1.8, 2.6],
+    minRecoveryTarget: 93,
+    description: 'A third-year bio-separation design problem. Extract high-value provitamin A carotenoids and residual palm lipids from fiber press cake. Operating temperature must strictly stay below 58°C to prevent trans-cis carotenoid bleaching, while managing non-Newtonian viscous underflow cake retention.',
+    industrialContext: 'Crucial for Malaysian oleochemical and palm refining engineering (flagship UPM chemical engineering industry focus).',
+  },
+  {
+    id: 'coffee-caffeine',
+    title: 'Beverage Plant: Green Coffee Decaffeination',
+    material: 'Raw Green Coffee Beans (Swollen)',
+    targetSolute: 'Caffeine (1,3,7-Trimethylxanthine)',
+    inertMatrix: 'Cellulose, Polysaccharides & Flavor Aromas',
+    recommendedSolvent: 'Water (Caffeine-Free Extract / Swiss Water Process)',
+    difficulty: 'standard',
+    solventsAvailable: [
+      {
+        id: 'water',
+        name: 'Water (Green Coffee Extract)',
+        polarity: 'polar-protic',
+        boilingPointC: 100,
+        selectivityScore: 8.5,
+        costPerKg: 0.2,
+      },
+      {
+        id: 'ethyl_acetate',
+        name: 'Ethyl Acetate (Natural)',
+        polarity: 'polar-aprotic',
+        boilingPointC: 77,
+        selectivityScore: 9.2,
+        costPerKg: 2.4,
+      },
+      {
+        id: 'hexane',
+        name: 'n-Hexane',
+        polarity: 'non-polar',
+        boilingPointC: 69,
+        selectivityScore: 2.0,
+        costPerKg: 1.2,
+        toxicityWarning: 'Caffeine has low solubility in pure non-polar aliphatic hydrocarbons.',
+      },
+      {
+        id: 'sc_co2',
+        name: 'Supercritical CO2',
+        polarity: 'supercritical',
+        boilingPointC: 31,
+        selectivityScore: 9.7,
+        costPerKg: 3.5,
+      },
+    ],
+    optimalTempRange: [65, 80],
+    optimalParticleMm: [1.2, 2.0], // swollen porous beans
+    optimalRatioSF: [2.5, 4.0],
+    minRecoveryTarget: 92,
+    description: 'Extract > 97% of caffeine from green coffee beans while preserving essential chlorogenic acids and precursor flavor volatiles inside the porous bean matrix.',
+    industrialContext: 'Utilizes battery diffusion columns or high-pressure supercritical fluid extractors where solvent selectively permeates soaked whole beans.',
+  },
+  {
+    id: 'anthocyanin-pigment',
+    title: 'Phytochemical Plant: Anthocyanin from Roselle (Hibiscus)',
+    material: 'Dried Hibiscus sabdariffa Calyces',
+    targetSolute: 'Anthocyanins (Delphinidin & Cyanidin Glycosides)',
+    inertMatrix: 'Pectin, Lignin & Plant Fiber',
+    recommendedSolvent: 'Acidified Aqueous Ethanol (pH 2.5)',
+    difficulty: 'standard',
+    solventsAvailable: [
+      {
+        id: 'acid_ethanol',
+        name: 'Aqueous Ethanol (50% v/v, pH 2.5)',
+        polarity: 'polar-protic',
+        boilingPointC: 84,
+        selectivityScore: 9.6,
+        costPerKg: 1.6,
+      },
+      {
+        id: 'water',
+        name: 'Hot Demineralized Water',
+        polarity: 'polar-protic',
+        boilingPointC: 100,
+        selectivityScore: 7.8,
+        costPerKg: 0.1,
+      },
+      {
+        id: 'hexane',
+        name: 'n-Hexane',
+        polarity: 'non-polar',
+        boilingPointC: 69,
+        selectivityScore: 0.5,
+        costPerKg: 1.2,
+        toxicityWarning: 'Anthocyanins are hydrophilic polyhydroxy flavonoids insoluble in hexane.',
+      },
+      {
+        id: 'acetone',
+        name: 'Acetone (70% aq)',
+        polarity: 'polar-aprotic',
+        boilingPointC: 62,
+        selectivityScore: 8.8,
+        costPerKg: 1.9,
+      },
+    ],
+    optimalTempRange: [40, 52], // Thermal degradation risk above 55°C
+    optimalParticleMm: [0.5, 1.0],
+    optimalRatioSF: [2.0, 3.5],
+    minRecoveryTarget: 88,
+    description: 'Extract heat-sensitive bioactive red pigment. Operating temperature must not exceed 55°C to avoid thermally breaking down the anthocyanin flavylium cation ring.',
+    industrialContext: 'Widely taught in Southeast Asian chemical & bioprocess engineering curricula (e.g. at UPM) for natural colorant and nutraceutical manufacturing.',
+  },
+  {
+    id: 'copper-ore-leach',
+    title: 'Hydrometallurgy Plant: Acid Leaching of Copper Ore',
+    material: 'Crushed Malachite / Chrysocolla Oxide Ore',
+    targetSolute: 'Copper Ion (Cu²⁺ as CuSO₄)',
+    inertMatrix: 'Insoluble Silicate & Gangue Rock',
+    recommendedSolvent: 'Dilute Sulfuric Acid Solution (H₂SO₄)',
+    difficulty: 'standard',
+    solventsAvailable: [
+      {
+        id: 'h2so4_dilute',
+        name: 'Dilute Sulfuric Acid (0.5 M H₂SO₄)',
+        polarity: 'polar-protic',
+        boilingPointC: 102,
+        selectivityScore: 9.9,
+        costPerKg: 0.4,
+      },
+      {
+        id: 'water',
+        name: 'Neutral Water',
+        polarity: 'polar-protic',
+        boilingPointC: 100,
+        selectivityScore: 1.0,
+        costPerKg: 0.05,
+        toxicityWarning: 'Copper oxide minerals do not dissolve in neutral water; acid is required to react chemically.',
+      },
+      {
+        id: 'hexane',
+        name: 'n-Hexane',
+        polarity: 'non-polar',
+        boilingPointC: 69,
+        selectivityScore: 0.0,
+        costPerKg: 1.2,
+        toxicityWarning: 'Inorganic mineral ores do not undergo acid dissolution with non-polar solvents.',
+      },
+    ],
+    optimalTempRange: [30, 48],
+    optimalParticleMm: [1.5, 3.5], // Coarser needed for heap/vat percolation to prevent blind bed blockage
+    optimalRatioSF: [1.5, 2.5],
+    minRecoveryTarget: 90,
+    description: 'Leach copper from low-grade oxide ore. Particles must allow high percolation rate without clay blinding, while maintaining high acid reactivity.',
+    industrialContext: 'Vat and dump leaching feed pregnant leach solution (PLS) to downstream solvent extraction and electrowinning (SX-EW).',
+  },
+];
+
+export const QUIZ_QUESTIONS: QuizQuestion[] = [
+  // --- Standard Core Questions (1 to 15) ---
+  {
+    id: 1,
+    topic: 'Mass Transfer & Driving Force',
+    question: 'In solid-liquid extraction, what is the primary driving force that governs the rate of mass transfer of solute into the solvent?',
+    options: [
+      'The difference between saturation solute concentration (c*) and bulk liquid concentration (c)',
+      'The difference between operating atmospheric pressure and vapor pressure',
+      'The gravitational acceleration across the packed bed',
+      'The shear stress generated by the mechanical impeller alone'
+    ],
+    correctIndex: 0,
+    explanation: 'Mass transfer is driven by the concentration gradient: Rate NA = kL · A · (c* - c), where c* is the equilibrium solubility at the solid interface and c is the bulk liquid concentration.',
+    formulaNote: 'N_A = k_L · A · (c^* - c)',
+    difficulty: 'standard',
+  },
+  {
+    id: 2,
+    topic: 'Particle Size Engineering',
+    question: 'Why is it inadvisable to grind raw solid feed into an extremely fine colloidal powder (< 0.05 mm) before bed percolation leaching?',
+    options: [
+      'It increases internal diffusion resistance inside individual particles',
+      'It drastically reduces the specific surface area available for dissolution',
+      'It causes bed compaction, high pressure drop, slow percolation, and channeling',
+      'It cools the solvent down by endothermic heat of crushing'
+    ],
+    correctIndex: 2,
+    explanation: 'While smaller particles reduce internal diffusion distance, ultra-fine powders severely compact the bed. This causes fluid channeling, high pressure drop, blind flooding, and difficulty separating fines from the extract.',
+    formulaNote: 'Kozeny-Carman Eq: ΔP/L ∝ (1-ε)² / ε³ · (1/dp²)',
+    difficulty: 'standard',
+  },
+  {
+    id: 3,
+    topic: 'Cascades: Counter-Current vs Cross-Current',
+    question: 'Why is a multistage counter-current cascade preferred over a multistage cross-current system in industrial extraction plants?',
+    options: [
+      'It requires separate supplies of fresh solvent in every stage, speeding up operation',
+      'It produces the highest extract concentration while consuming minimum total solvent',
+      'It eliminates the need for any mechanical pumps between stages',
+      'It prevents any solute from entering the raffinate stream at equilibrium'
+    ],
+    correctIndex: 1,
+    explanation: 'In counter-current flow, fresh solvent contacts the most depleted solid (Stage N), maintaining a continuous driving force throughout, while the raw solid (Stage 1) contacts rich solution, producing maximum final extract concentration with minimal solvent consumption.',
+    formulaNote: 'Minimizes Solvent-to-Feed ratio S/F while maximizing recovery',
+    difficulty: 'standard',
+  },
+  {
+    id: 4,
+    topic: 'Temperature Influence',
+    question: 'How does increasing the operating extraction temperature generally enhance the extraction rate?',
+    options: [
+      'It increases solute solubility and diffusivity (D ∝ T/μ) while lowering liquid viscosity',
+      'It reduces molecular kinetic energy and tightens the boundary layer',
+      'It increases the underflow liquid retention per kilogram of inert solid',
+      'It shifts all non-polar solutes into volatile gaseous state'
+    ],
+    correctIndex: 0,
+    explanation: 'Higher temperature increases solute solubility and significantly raises the molecular diffusion coefficient via the Stokes-Einstein relation (DAB = k·T / (6πηr)). Reduced viscosity also improves fluid circulation through pores.',
+    formulaNote: 'D_{AB} ∝ T / μ',
+    difficulty: 'standard',
+  },
+  {
+    id: 5,
+    topic: 'Definitions: Overflow vs Underflow',
+    question: 'In chemical engineering leaching nomenclature, what is the clear liquid solution leaving a leaching stage designated as?',
+    options: [
+      'Underflow / Raffinate (L)',
+      'Extract / Overflow (V or E)',
+      'Miscella slurry or Marc bed',
+      'Condensate distillate'
+    ],
+    correctIndex: 1,
+    explanation: 'Extract (Overflow, V or E) is the clear solution containing solvent and dissolved solute free of insoluble inert carrier solids. Underflow (Raffinate, L) is the settled slurry containing inert solids and adhering retained solution.',
+    formulaNote: 'Extract = Overflow (V); Raffinate slurry = Underflow (L)',
+    difficulty: 'standard',
+  },
+  {
+    id: 6,
+    topic: 'Underflow Assumptions',
+    question: 'What is the physical meaning of the "Constant Underflow" assumption frequently applied in Hunter-Nash leaching stage calculations?',
+    options: [
+      'The mass of solution retained per unit mass of insoluble inert solid is constant across all stages',
+      'The concentration of solute in the extract is always identical to the feed concentration',
+      'The volumetric flow rate of overflow liquid is exactly zero in every stage',
+      'The temperature and pressure inside all extractor columns remain constant'
+    ],
+    correctIndex: 0,
+    explanation: 'Under "Constant Underflow", N = B / (A + S) (or kg solution retained per kg inert B) is invariant with solute concentration. On a Ponchon-Savarit or Hunter-Nash diagram, this plots as a horizontal line parallel to the hypotenuse/axis.',
+    formulaNote: 'N = B / (A + S) = constant',
+    difficulty: 'standard',
+  },
+  {
+    id: 7,
+    topic: 'Ternary Representation (Hunter-Nash)',
+    question: 'In a right-triangular Hunter-Nash diagram for leaching, where does the pure inert carrier solid (B) lie?',
+    options: [
+      'At the apex representing 100% Solute (A)',
+      'At the origin (0,0) or dedicated vertex representing 100% Insoluble Solid (B)',
+      'Along the hypotenuse representing binary solute-solvent mixtures',
+      'At the center of gravity of the equilateral triangle'
+    ],
+    correctIndex: 1,
+    explanation: 'In triangular coordinates, vertices represent pure components: A (Solute), B (Inert Solid), and S (Solvent). The hypotenuse represents clear liquid mixtures (free of insoluble solid B).',
+    formulaNote: 'xA + xB + xS = 1.0',
+    difficulty: 'standard',
+  },
+  {
+    id: 8,
+    topic: 'The Mixing Point & Lever Rule',
+    question: 'When raw feed (L0) and fresh solvent (VN+1) are combined, the overall mixture point (M) must lie on:',
+    options: [
+      'A straight line connecting point L0 and point VN+1 on the diagram',
+      'The vertical axis representing zero solvent concentration',
+      'A curved parabolic line dependent on the impeller Reynolds number',
+      'The pure solvent coordinate vertex only'
+    ],
+    correctIndex: 0,
+    explanation: 'By the overall material balance (M = L0 + VN+1 = L1 + V1), the mixture point M lies strictly on the straight line segment connecting L0 and VN+1 according to the inverse lever arm rule.',
+    formulaNote: 'M = L_0 + V_{N+1} · (Lever Rule: L_0 / V_{N+1} = dist(M, V_{N+1}) / dist(L_0, M))',
+    difficulty: 'standard',
+  },
+  {
+    id: 9,
+    topic: 'Industrial Equipment: Bollman Extractor',
+    question: 'Which of the following describes the operational mechanism of a Bollman bucket-type extractor?',
+    options: [
+      'A series of perforated perforated baskets moving vertically on an endless chain, utilizing both co-current and counter-current percolation',
+      'A rotating horizontal carousel segmented into pie-shaped cells above a stationary perforated plate',
+      'An inclined U-tube screw conveyor where solids are pushed against a counter-current liquid cascade',
+      'A laboratory glass siphon vessel that continuously boils and condenses solvent over a cellulose thimble'
+    ],
+    correctIndex: 0,
+    explanation: 'The Bollman extractor consists of perforated baskets suspended on continuous chains inside a vapor-tight housing. Solids descend in one leg (co-current percolation with half-miscella) and ascend in the other (counter-current with fresh solvent).',
+    formulaNote: 'Percolation bucket elevator extractor (widely used in oilseed milling)',
+    difficulty: 'standard',
+  },
+  {
+    id: 10,
+    topic: 'Industrial Equipment: Rotocel Extractor',
+    question: 'The Rotocel extractor is classified as which type of solid-liquid extraction equipment?',
+    options: [
+      'Agitated immersion tank with centrifugal disc bowl',
+      'Continuous horizontal rotating carousel percolation extractor',
+      'Pneumatic fluidized bed column with cyclone separator',
+      'Multi-plate bubble-cap distillation column'
+    ],
+    correctIndex: 1,
+    explanation: 'The Rotocel extractor features a slowly revolving horizontal cylindrical vessel divided into wedge-shaped compartments over a stationary screen, spraying progressively leaner miscella counter-currently.',
+    formulaNote: 'Rotocel = Rotating carousel percolation extractor',
+    difficulty: 'standard',
+  },
+  {
+    id: 11,
+    topic: 'Solvent Selectivity & Criteria',
+    question: 'Which of the following is NOT a desirable property for an industrial leaching solvent?',
+    options: [
+      'High chemical selectivity and equilibrium solubility for the target solute',
+      'Low viscosity and low surface tension to accelerate percolation and wetting',
+      'Boiling point identical to that of the solute to make separation impossible without chemical reaction',
+      'Ease of solvent recovery via downstream evaporation or distillation'
+    ],
+    correctIndex: 2,
+    explanation: 'A solvent must have a significant boiling point difference from the solute (or allow easy stripping) so that the solvent can be recovered cleanly and recycled with minimal energy consumption.',
+    formulaNote: 'Selectivity β = (yA/yB) / (xA/xB) >> 1; ΔTb large',
+    difficulty: 'standard',
+  },
+  {
+    id: 12,
+    topic: 'Mass Transfer Boundary Layer',
+    question: 'How does increasing mechanical agitation (RPM) in an agitated slurry leaching tank improve the extraction rate?',
+    options: [
+      'It decreases the thickness of the hydrodynamic liquid boundary layer (δ), increasing the mass transfer coefficient kL',
+      'It increases the diameter of the solid particles by agglomeration',
+      'It reduces the natural solubility of solute at the solid-liquid interface',
+      'It converts insoluble inert carrier matrix into additional solvent'
+    ],
+    correctIndex: 0,
+    explanation: 'According to film theory, kL = DAB / δ. Mechanical agitation shears the stagnant liquid film surrounding each particle, thinning δ and thereby increasing the convective mass transfer coefficient kL.',
+    formulaNote: 'k_L = D_{AB} / δ · (Sh = 2 + 0.6 Re^{1/2} Sc^{1/3})',
+    difficulty: 'standard',
+  },
+  {
+    id: 13,
+    topic: 'Variable Underflow Behavior',
+    question: 'In practical leaching, why does the solution retained in the underflow (slurry) often increase as the solute concentration rises?',
+    options: [
+      'High solute concentration raises liquid viscosity and density, hindering clean drainage from the pores and matrix voids',
+      'The solute molecules physically expand the volume of the stainless steel vessel',
+      'The higher concentration causes the inert solid to boil spontaneously',
+      'The solvent evaporates instantaneously upon contacting solute'
+    ],
+    correctIndex: 0,
+    explanation: 'Concentrated solutions (such as rich sugar syrup or heavy oil miscella) have significantly higher viscosity and higher adhesive wetting force, leading to greater liquid holdup in the underflow slurry cake.',
+    formulaNote: 'Variable Underflow: Solution retention N = f(x_A, μ)',
+    difficulty: 'standard',
+  },
+  {
+    id: 14,
+    topic: 'Ideal vs Non-Ideal Stage',
+    question: 'By definition, what occurs in an "ideal" (theoretical equilibrium) solid-liquid extraction stage?',
+    options: [
+      'All solute is completely destroyed by exothermic reaction',
+      'The overflow solution and the solution adhering to the underflow solid leave in complete phase equilibrium with identical solute concentrations',
+      'Zero solvent leaves in the underflow slurry',
+      'The mass of feed exactly equals the mass of fresh solvent'
+    ],
+    correctIndex: 1,
+    explanation: 'In an ideal equilibrium stage, there is sufficient contact time and mixing such that the clear overflow solution (x_V) and the liquid retained in the underflow (x_L) have identical composition: x_V = x_L.',
+    formulaNote: 'Ideal Stage: x_{A, overflow} = x_{A, underflow solution}',
+    difficulty: 'standard',
+  },
+  {
+    id: 15,
+    topic: 'Laboratory Extraction: Soxhlet',
+    question: 'What is the chief thermodynamic and operational advantage of a laboratory Soxhlet extractor?',
+    options: [
+      'It operates at cryogenic temperatures to freeze the inert matrix',
+      'It continuously recycles a small volume of solvent by boiling, condensing, and repeatedly siphoning fresh warm solvent over the sample thimble',
+      'It uses high-speed rotating blades to pulverize the sample under vacuum',
+      'It eliminates the need for any heating or cooling mantle'
+    ],
+    correctIndex: 1,
+    explanation: 'The Soxhlet extractor achieves exhaustive extraction using only a modest volume of solvent: evaporated solvent condenses into the extraction chamber until the siphon arm fills and dumps concentrated extract back into the boiling flask, repeating the cycle automatically.',
+    formulaNote: 'Continuous cyclic siphon percolation using distilled solvent vapor',
+    difficulty: 'standard',
+  },
+
+  // --- RIGOROUS 3RD YEAR UNIVERSITY CHEMICAL ENGINEERING QUESTIONS (16 to 25) ---
+  {
+    id: 16,
+    topic: 'Operating Difference Point Δ Coordinates',
+    question: 'In the Hunter-Nash / Ponchon-Savarit method for counter-current leaching, what is the exact coordinate formulation for the operating difference point (Δ)?',
+    options: [
+      'x_Δ = (L₀·x_A0 - V₁·y_A1) / (L₀ - V₁) and N_Δ = B / (L₀ - V₁)',
+      'x_Δ = (L₀ + V₁) / 2 and N_Δ = (N₀ + N_V) / 2',
+      'x_Δ = x_A0 · y_A1 and N_Δ = B · (L₀ + V₁)',
+      'x_Δ = 1.0 - (L₀ / V₁) and N_Δ = 0'
+    ],
+    correctIndex: 0,
+    explanation: 'From the net stage invariant balance: Δ = L₀ - V₁ = L_n - V_{n+1} = L_N - V_{N+1}. Conserving solute gives x_Δ = (L₀·x_A0 - V₁·y_A1) / (L₀ - V₁), while conserving inert solids B gives N_Δ = B / (L₀ - V₁). Operating lines connect Δ through L_n and V_{n+1}.',
+    formulaNote: 'Δ = L_n - V_{n+1} = constant vector',
+    difficulty: 'year3_advanced',
+    year3Category: 'Hunter-Nash & Ponchon-Savarit',
+  },
+  {
+    id: 17,
+    topic: 'Minimum Solvent-to-Feed Ratio & Pinch Point',
+    question: 'When determining the Minimum Solvent Rate (V_{min}) in a counter-current leaching battery, what geometric condition marks the pinch point?',
+    options: [
+      'When the difference ray from Δ coincides with or becomes tangent to an equilibrium tie line, requiring an infinite number of theoretical stages',
+      'When the overflow extract concentration reaches exactly 100 wt% solute',
+      'When the underflow line becomes perpendicular to the horizontal axis',
+      'When the temperature of the solvent matches the triple point of inert solid B'
+    ],
+    correctIndex: 0,
+    explanation: 'The minimum solvent rate (V_{min}) corresponds to the operating difference point (Δ_{min}) where an operating ray passes through a tie line. At this pinch intersection, the driving force (Δx) vanishes, necessitating infinite stages (N → ∞) to achieve separation.',
+    formulaNote: '(S/F)_{min} occurs at tie-line pinch: (x_{n} - y_{n+1}) → 0',
+    difficulty: 'year3_advanced',
+    year3Category: 'Hunter-Nash & Ponchon-Savarit',
+  },
+  {
+    id: 18,
+    topic: 'Kremser Equation for Leaching',
+    question: 'Under what conditions can the analytical Kremser-Brown-Saunders equation be strictly applied to calculate the number of theoretical stages in leaching?',
+    options: [
+      'When both the solution-to-solid ratio in the underflow and the overflow rate are constant, and the equilibrium distribution coefficient m = y*/x is linear (m = 1.0)',
+      'Whenever the particles are non-spherical and have unknown porosity',
+      'Only when the temperature varies exponentially from Stage 1 to Stage N',
+      'Whenever the solvent is completely insoluble in the solute'
+    ],
+    correctIndex: 0,
+    explanation: 'The Kremser equation N = ln[( (x_0 - y_{N+1}/m)/(x_N - y_{N+1}/m) )(1 - 1/E) + 1/E] / ln(E) assumes constant flow rates L and V (constant underflow) and a constant linear equilibrium partition m = y/x = 1.0 (where complete dissolution leaves identical solute concentration in adhering and clear solutions).',
+    formulaNote: 'E = m·V/L = V/L (for ideal dissolution m=1.0)',
+    difficulty: 'year3_advanced',
+    year3Category: 'Equilibrium & Kremser',
+  },
+  {
+    id: 19,
+    topic: 'Biot Number for Mass Transfer (Bi_m)',
+    question: 'In solid leaching kinetics, the mass transfer Biot number is defined as Bi_m = (k_L · R_p) / D_{eff}. If a student measures Bi_m = 45, what does this indicate about the rate-limiting mechanism?',
+    options: [
+      'External fluid boundary layer film resistance governs the overall extraction rate',
+      'Internal intraparticle pore diffusion governs the overall rate (internal diffusion controlled)',
+      'The extraction rate is purely reaction-rate controlled at the atomic level',
+      'The system is in thermodynamic equilibrium with zero mass transfer resistance'
+    ],
+    correctIndex: 1,
+    explanation: 'Bi_m is the ratio of internal diffusion resistance (R_p / D_{eff}) to external convective film resistance (1 / k_L). When Bi_m >> 1 (such as 45), intraparticle diffusion through the porous solid matrix is much slower than external mass transfer, meaning the extraction is internally diffusion-controlled.',
+    formulaNote: 'Bi_m = (k_L · R_p) / D_{eff} >> 1 ⟹ Internal Diffusion Control',
+    difficulty: 'year3_advanced',
+    year3Category: 'Mass Transfer Kinetics',
+  },
+  {
+    id: 20,
+    topic: 'Effective Diffusivity in Porous Biomass',
+    question: 'For solute diffusion through a porous botanical cellular matrix, how is the effective diffusion coefficient (D_{eff}) related to molecular diffusivity (D_{AB})?',
+    options: [
+      'D_{eff} = (D_{AB} · ε_p) / τ, where ε_p is particle porosity and τ is the tortuosity factor (τ ≥ 1)',
+      'D_{eff} = D_{AB} · (τ / ε_p)²',
+      'D_{eff} = D_{AB} + (ε_p · k_L) / R_p',
+      'D_{eff} = D_{AB} · exp(-τ · ε_p)'
+    ],
+    correctIndex: 0,
+    explanation: 'Tortuous and constrictive pores reduce diffusive flux. Porosity ε_p accounts for the open cross-sectional area available for transport, while tortuosity τ (typically 1.5 to 6) accounts for the zigzag, non-linear diffusion path length: D_{eff} = (ε_p / τ) · D_{AB}.',
+    formulaNote: 'D_{eff} = D_{AB} · (ε_p / τ)  ;  τ = (L_{actual} / L_{straight})²',
+    difficulty: 'year3_advanced',
+    year3Category: 'Transport Phenomena',
+  },
+  {
+    id: 21,
+    topic: 'Variable Underflow vs Constant Underflow',
+    question: 'When variable underflow data is plotted as N = f(x_A) where retention increases with solute concentration due to viscosity, how does the required number of stages compare to a constant underflow calculation at equal solvent flow?',
+    options: [
+      'Variable underflow requires MORE theoretical stages because increased liquid holdup carries more solute backward in the underflow',
+      'Variable underflow requires FEWER theoretical stages because the slurry moves faster',
+      'The number of theoretical stages is mathematically identical regardless of underflow curvature',
+      'The stages become negative on the Hunter-Nash construction'
+    ],
+    correctIndex: 0,
+    explanation: 'At higher solute concentrations, the higher solution viscosity causes greater underflow retention (lower N = kg solid/kg solution, meaning more liquid adhering to the cake). This retains more unextracted solute in each stage, reducing stage efficiency and increasing the required number of equilibrium stages.',
+    formulaNote: 'Higher slurry liquid holdup ⟹ Reduced stage separation factor',
+    difficulty: 'year3_advanced',
+    year3Category: 'Hunter-Nash & Ponchon-Savarit',
+  },
+  {
+    id: 22,
+    topic: 'Sherwood Number & Film Thinning Correlations',
+    question: 'Using the Frössling correlation Sh = 2.0 + 0.6 · Re_p^{1/2} · Sc^{1/3}, what happens to the convective mass transfer coefficient k_L in a stagnant fluid where particle Reynolds number Re_p → 0?',
+    options: [
+      'k_L approaches zero, stopping all mass transfer',
+      'Sh approaches 2.0, representing pure steady-state molecular conduction into an infinite medium (k_L = 2 D_{AB} / d_p)',
+      'Sh becomes undefined and causes mathematical divergence',
+      'k_L becomes proportional to the square root of impeller power per unit volume'
+    ],
+    correctIndex: 1,
+    explanation: 'When Re_p = 0 (stagnant fluid around a sphere), convection vanishes but molecular diffusion continues. The analytical solution for steady radial conduction from a sphere gives Sh = (k_L · d_p) / D_{AB} = 2.0, meaning k_L = 2 D_{AB} / d_p.',
+    formulaNote: 'Sh_{min} = 2.0  ⟹  k_L = 2 D_{AB} / d_p',
+    difficulty: 'year3_advanced',
+    year3Category: 'Transport Phenomena',
+  },
+  {
+    id: 23,
+    topic: 'Supercritical Fluid Extraction (SFE) Physics',
+    question: 'In supercritical fluid extraction with CO₂ (T_c = 31.1°C, P_c = 73.8 bar), what is the "crossover pressure" phenomenon observed when altering temperature?',
+    options: [
+      'A specific pressure where the negative effect of temperature on solvent density balances the positive effect on solute vapor pressure, inverting the solubility trend with T',
+      'The point where supercritical CO₂ solidifies into dry ice under mechanical agitation',
+      'The pressure where the critical temperature of CO₂ increases by 50%',
+      'The pressure at which the extract and raffinate form an immiscible liquid-liquid azeotrope'
+    ],
+    correctIndex: 0,
+    explanation: 'Below the crossover pressure, increasing T lowers CO₂ density drastically, reducing solute solubility. Above the crossover pressure, the solvent density is less sensitive to T, and the increasing solute vapor pressure dominates, so solubility increases with T.',
+    formulaNote: 'Solubility = f(ρ_{CO2}(T,P), P_{sat}(T))',
+    difficulty: 'year3_advanced',
+    year3Category: 'Mass Transfer Kinetics',
+  },
+  {
+    id: 24,
+    topic: 'Wilke-Chang Diffusivity Estimation',
+    question: 'According to the Wilke-Chang equation for solute diffusion in low-viscosity liquid solvents, what is the dependence of liquid diffusivity D_{AB} on solute molar volume at normal boiling point (V_A)?',
+    options: [
+      'D_{AB} ∝ V_A^{-0.6}',
+      'D_{AB} ∝ V_A^{2.0}',
+      'D_{AB} is completely independent of V_A',
+      'D_{AB} ∝ ln(V_A)'
+    ],
+    correctIndex: 0,
+    explanation: 'The Wilke-Chang correlation states: D_{AB} = 7.4 × 10^{-8} · (ϕ·M_B)^{0.5} · T / (μ_B · V_A^{0.6}). Larger solute molecules with larger molar volumes encounter greater hydrodynamic drag, scaling as V_A^{-0.6}.',
+    formulaNote: 'D_{AB} ∝ (ϕ · M_B)^{1/2} · T / (μ_B · V_A^{0.6})',
+    difficulty: 'year3_advanced',
+    year3Category: 'Transport Phenomena',
+  },
+  {
+    id: 25,
+    topic: 'Counter-Current Decantation (CCD) Slurry Flux',
+    question: 'In a battery of Dorr thickeners operating continuous counter-current decantation (CCD), what limitation dictates the maximum allowable solid feed rate to prevent overflow cloudiness?',
+    options: [
+      'The Coe-Clevenger critical solids flux at the zone settling concentration: G = v_s / (1/C - 1/C_u)',
+      'The cavitation limit of the solvent transfer pump impeller blades',
+      'The vapor pressure of water at standard room temperature',
+      'The gravitational Rayleigh-Taylor instability in the clear overflow weir'
+    ],
+    correctIndex: 0,
+    explanation: 'According to Kynch and Coe-Clevenger batch sedimentation theory, solids flux G = v_s · C. The minimum flux in the settling concentration profile defines the limiting solids handling capacity (critical area A = L_s / G_{min}) of each thickener in the CCD train.',
+    formulaNote: 'A_{thickener} = F_s · ( (1/C_{lim}) - (1/C_u) ) / v_s',
+    difficulty: 'year3_advanced',
+    year3Category: 'Transport Phenomena',
+  }
+];
+
+export const EQUIPMENT_LIST: EquipmentMatchItem[] = [
+  {
+    id: 'bollman',
+    name: 'Bollman Bucket Extractor',
+    type: 'Percolation',
+    mechanism: 'Endless vertical chain carrying perforated baskets. Solids descend in one leg (co-current spray with half-miscella) and ascend in second leg (counter-current wash with fresh solvent).',
+    keyFeature: 'Handles fragile flaked oilseeds (soybeans) without excessive fines attrition.',
+    iconName: 'Layers'
+  },
+  {
+    id: 'rotocel',
+    name: 'Rotocel Carousel Extractor',
+    type: 'Percolation',
+    mechanism: 'Compartmentalized cylindrical carousel revolving slowly around a vertical axis over a stationary perforated drainage plate.',
+    keyFeature: 'Compact circular footprint with multiple counter-current spray stages on top.',
+    iconName: 'RotateCw'
+  },
+  {
+    id: 'kennedy',
+    name: 'Kennedy Screw Extractor',
+    type: 'Immersion',
+    mechanism: 'Series of horizontal or gently inclined curved troughs with slow-turning helical impellers pushing solids counter-current to flowing liquid.',
+    keyFeature: 'Continuous immersion suitable for fast-leaching granular or fibrous materials.',
+    iconName: 'ChevronsRight'
+  },
+  {
+    id: 'soxhlet',
+    name: 'Soxhlet Extraction Apparatus',
+    type: 'Laboratory',
+    mechanism: 'Boiling flask vaporizes solvent, condenser drips fresh reflux onto porous cellulose thimble, and siphon arm periodically drains concentrated extract.',
+    keyFeature: 'Exhaustive repetitive batch leaching in standard testing methods (AOAC, ASTM).',
+    iconName: 'FlaskConical'
+  },
+  {
+    id: 'dorr_ccd',
+    name: 'Dorr Continuous Counter-Current Decantation (CCD)',
+    type: 'Continuous Decantation',
+    mechanism: 'Battery of large gravity thickeners connected in counter-current sequence; solids settle to bottom rakes while clear overflow cascades upstream.',
+    keyFeature: 'Hydrometallurgy and chemical sludge washing with high liquid-to-solid throughput.',
+    iconName: 'Workflow'
+  }
+];

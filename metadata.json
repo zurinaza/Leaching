@@ -1,0 +1,6 @@
+{
+  "name": "LeachMaster - Solid-Liquid Extraction Classroom Game",
+  "description": "An interactive classroom game and simulator for Chemical Engineering students to master solid-liquid extraction (leaching) principles, cascades, and equipment.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
